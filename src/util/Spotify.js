@@ -1,6 +1,6 @@
 let accessToken = '';
 const clientId ='fe45aa5c44b543619a0c05e9447d6619';
-const redirectUri ='http://localhost:3000/';
+const redirectUri ='http://playlistjammmer.surge.sh/';
 
 const Spotify ={
   getAccessToken() {
@@ -17,7 +17,7 @@ const Spotify ={
       return accessToken;
     } else {
       const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
-      window.location.href = accessUrl; 
+      window.location.href = accessUrl;
     }
 },
 
@@ -43,7 +43,6 @@ search(term) {
     });
   },
 
-
   savePlaylist(playlistName, trackUris){
     if(playlistName && trackUris){
       const accessToken = Spotify.getAccessToken();
@@ -54,14 +53,14 @@ search(term) {
   ).then(jsonResponse =>{
       if(jsonResponse.id){
         userId=jsonResponse.id;
-        return fetch(`https://api-to-call.com/v1/users/${userId}/playlists`, {
+        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
           headers: headers,
           method: 'POST',
           body: JSON.stringify({name: playlistName})
         }).then(response => response.json()
       ).then(jsonResponse =>{
         const playlistId = jsonResponse.id;
-        return fetch(`https://api-to-call.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
+        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
           headers: headers,
           method: 'POST',
           body: JSON.stringify({uris: trackUris})
